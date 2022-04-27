@@ -23,9 +23,9 @@ x_k = sin(2*pi.*f_k.*k*T);
 
 num_samples = 1048576
 k = 1:num_samples;
-lowNoise = 30;
-moderateNoise = 10;
-highNoise = 1;
+lowNoise = 40;
+moderateNoise = 20;
+highNoise = 10;
 num_chirps = 5;
 
 % awgn(signal, SNR) = add white gaussian noise
@@ -57,18 +57,17 @@ plot(hn_chirp)
 title('High noise chirp = (SNR = 5)')
 %}
 sigs_to_correlate = [chirp_signal; ln_chirp; mn_chirp; hn_chirp];
-for i = 1:(length(sigs_to_correlate)-1)
-    current_plot = sigs_to_correlate(i,:);
+for i = 1:length(sigs_to_correlate)
     %Correleate the signal using dsp_companion
-    r = f_corr(current_plot,x_k, 0, 0);
+    r = f_corr(chirp_signal,x_k, 0, 0);
     r_i = 1:length(r);
-
+    
     %get the maximum value of the cross correlation as well as the index
     %where it occurs
     peak_i = find(r > 1.5E-4)
     
     subplot(2,1,1)
-    plot(current_plot)
+    plot(chirp_signal)
     title('Chirp signal no noise')
     ylabel('x(k)')
     xlabel('k')
@@ -76,7 +75,7 @@ for i = 1:(length(sigs_to_correlate)-1)
     plot(r)
     hold on
     plot(r_i, r,'-p', 'MarkerIndices', peak_i,'MarkerFaceColor','red', 'MarkerSize',10);
-    title('Linear correlation')
+    title('Linear correlation with noiseless chirp signal')
     ylabel('r_{xy}')
     xlabel('k')
 end
