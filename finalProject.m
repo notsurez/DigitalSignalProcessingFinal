@@ -26,7 +26,7 @@ k = 1:num_samples;
 lowNoise = 30;
 moderateNoise = 10;
 highNoise = 1;
-num_chirps = 5;
+num_chirps = 8;
 
 % awgn(signal, SNR) = add white gaussian noise
 chirp_signal = zeros(1, num_samples);
@@ -57,7 +57,7 @@ plot(hn_chirp)
 title('High noise chirp = (SNR = 5)')
 %}
 sigs_to_correlate = [chirp_signal; ln_chirp; mn_chirp; hn_chirp];
-for i = 1:(length(sigs_to_correlate)-1)
+for i = 1:(size(sigs_to_correlate, 1))
     current_plot = sigs_to_correlate(i,:);
     %Correleate the signal using dsp_companion
     r = f_corr(current_plot,x_k, 0, 0);
@@ -69,7 +69,7 @@ for i = 1:(length(sigs_to_correlate)-1)
     
     subplot(2,1,1)
     plot(current_plot)
-    title('Chirp signal no noise')
+    title('Signal with chirps')
     ylabel('x(k)')
     xlabel('k')
     subplot(2,1,2)
@@ -90,6 +90,7 @@ function sigWithChirp = addRandomChirp(x, num_chirps)
     %Generate Chirp Signal
     M = 512; f_s = 1E6; T = 1/f_s;
     k = 1:M;
+
     %f(k) and x(k) from the chirp function in 2.10
     f_k = (k.*f_s)./(2*(M-1));
     x_k = sin(2*pi.*f_k.*k*T);
@@ -98,9 +99,16 @@ function sigWithChirp = addRandomChirp(x, num_chirps)
     for j = 1:num_chirps
         %Generate add chirp signal to a random point in x, make sure it fits
         chirpStart = floor(random('Uniform', 0, L-M));
+        chirpMag = random('Uniform', 1, 3);
         for i = 1:M
-            x(i + chirpStart) = x_k(i);
+            x(i + chirpStart) = chirpMag*x_k(i);
         end
     end
     sigWithChirp = x; %return argument
+end
+
+
+%Function to add a random sinusiod (WIP)
+function sigWithSin = addRandomWave(x)
+    m = 1:length(x);
 end
