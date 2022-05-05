@@ -4,3 +4,5 @@
  ### REQUIREMENTS
   + Matlab
   + Matlab communications toolbox
+  + DSP companion provided with Digital Signal Processing with and Matlab (Schilling & Harris 3rd edition)
+  - https://www.mathworks.com/matlabcentral/fileexchange/49889-dsp-companion-student-version-3-0
